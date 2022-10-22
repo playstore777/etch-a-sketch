@@ -1,49 +1,75 @@
+const body = document.querySelector('body');
 const mainContainer = document.querySelector('.container');
-
-let mainContainerStyle = `
-min-width: 640px;
-min-height: 640px;
-max-width: 640px;
-max-height: 640px;
-display: flex;
-flex-wrap: wrap;
-aspect-raio: 1/1;
-`;
-
-// justify-content: center;
-// align-items: stretch;
-// grid-template-row: 1fr;
-// grid-template-column: 1fr;
-
-let input = parseInt(prompt('How many squares you want in a div?'))
-console.log('input: ', input);
-let totalSquares = (input * input);
-console.log('totals squares: ', totalSquares);
-let gridSquaresPercent = 100/(input);
-console.log('grid squares percent: ', gridSquaresPercent)
-let gridSquaresStyle = `
-background-color: skyblue;
-aspect-ratio: 1/1;
-color: black;
-flex: 1 1 ${gridSquaresPercent}%;
-`
-// border: 1px solid black;
-// width: ${gridSquaresPercent}%;
-// height: ${gridSquaresPercent}%;
-// min-width: 10px;
-// min-heigth: 10px;
-// width: 33%; // flex: 1 1 33%; is same as this;
-// height: 33%; // flex: 1 1 33%; is same as this;
-// flex-grow: 1;
-
-mainContainer.setAttribute('style', mainContainerStyle);
-
-for (let i = 0; i < totalSquares; i++) {
-    const gridDiv = document.createElement('div');
-    // gridDiv.textContent = i;
-    gridDiv.id = i;
-    gridDiv.setAttribute('style', gridSquaresStyle);
-    mainContainer.append(gridDiv);
+const button = document.createElement('button');
+let pass = 10;
+const mOver = function () {
+    if (pass < 1) {
+        pass = 10;
+    }
+    let b = ((pass * 10));
+    let div = this;
+    /***
+     * Random RGB colors on hover!
+    let r = Math.round(Math.random() * 150);
+    let g = Math.round(Math.random() * 170);
+    let b = Math.round(Math.random() * 190);
+    div.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+    */
+    div.style.backgroundColor = `rgb(${b}, ${b}, ${b})`;
+    pass--;
 }
 
-console.log(mainContainer);
+const action = function () {
+    input = parseInt(prompt('How many squares you want in a div?'));
+    Remove();
+    Start(input);
+}
+
+function Start(input) {
+    let totalSquares = (input * input);
+    let gridSquaresPercent = 100/(input);
+    let mainContainerStyle = `
+        min-width: 360px;
+        min-height: 360px;
+        max-width: 360px;
+        max-height: 360px;
+        display: flex;
+        flex-wrap: wrap;
+        aspect-raio: 1/1;
+    `;    
+    let gridSquaresStyle = `
+        box-sizing: border-box;
+        background-color: white;
+        aspect-ratio: 1/1;
+        border: 1px solid black;
+        color: black;
+        flex: 1 1 ${gridSquaresPercent}%;
+    `;    
+    let buttonStyle = `
+        border-radius: 6px;
+        padding: 5px 10px;
+    `;
+    mainContainer.setAttribute('style', mainContainerStyle);
+    button.textContent = "Size";
+    button.setAttribute('style', buttonStyle);
+    button.addEventListener('click', action);
+    for (let i = 0; i < totalSquares; i++) {
+        const gridDiv = document.createElement('div');
+        gridDiv.id = i;
+        gridDiv.setAttribute('style', gridSquaresStyle);
+        gridDiv.addEventListener('mouseover', mOver);
+        mainContainer.append(gridDiv);
+    }
+}
+
+function Remove() {
+    if (document.querySelectorAll('.container>div')){
+        document.querySelectorAll('.container>div').forEach(div => {
+            div.remove();
+        })
+    }
+}
+
+Start(12);
+
+body.insertBefore(button, mainContainer);
